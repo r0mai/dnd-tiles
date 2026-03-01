@@ -1,54 +1,46 @@
-tile_width=30;
-tile_border_width=2;
-tile_height=5;
-notch_size=3;
-notch_margin=0.2;
+width = 30;
+thickness = 2;
+height = 8;
+hook_height = 2;
+hook_width = 10;
+margin = 0.2;
 
-module external_world(x, y) {
-    translate([x*tile_width, y*tile_width]) {
-        cube([tile_width, tile_width, 2*tile_height], center=true);
-    }
-}
 
 module outer_cube() {
-    cube([tile_width, tile_width, tile_height], center=true);
+    cube([width, width, height], center=true);
 }
 
 module inner_cube() {
-    cube([tile_width-tile_border_width, tile_width-tile_border_width, 2*tile_height], center=true);   
+    cube([width-2*thickness, width-2*thickness, 2*height], center=true);   
 }
 
-module notch(x, y, size, height) {         
-    translate([x, y]) rotate([0, 0, 45]) { cube([size, size, height], center=true); }   
-    
+module hook(x, y, m) {
+
+    translate([x*0.5*width, 0, (hook_height-height)*0.5]) {
+        cube([hook_width, 3*thickness, hook_height+m], center=true); // hook bottom cube
+        translate([0, thickness, thickness]) {
+            cube([hook_width, thickness - margin, 2*hook_height], center=true); // hook side cube
+        }
+    }
 }
 
 module one_by_one() {
     union() {
-        difference() {
-            union() {
-                difference() { outer_cube(); inner_cube(); }
-                difference() { notch(+tile_width*0.5, 0, notch_size-notch_margin, tile_height); inner_cube(); }
-                difference() { notch(0, +tile_width*0.5, notch_size-notch_margin, tile_height); inner_cube(); }
-            }
-            // cutout for inverse notches
-            notch(-tile_width*0.5, 0, notch_size*1.8, tile_height*2);
-            notch(0, -tile_width*0.5, notch_size*1.8, tile_height*2);
-        }
-        // inverse notches
-        difference() {
-            notch(0, -tile_width*0.5, 2*notch_size, tile_height);
-            external_world(0, -1);
-            notch(0, -tile_width*0.5, notch_size, 2*tile_height);
-        }
-        difference() {
-            notch(-tile_width*0.5, 0, 2*notch_size, tile_height);
-            external_world(-1, 0);
-            notch(-tile_width*0.5, 0, notch_size, 2*tile_height);
-        }
+        difference() { outer_cube(); inner_cube(); }
     }
 }
 
-one_by_one();
+
+
+difference() {
+    union() {
+        difference() { outer_cube(); inner_cube(); }    
+        rotate(00) translate([0, width*0.5 + 0.5*thickness, 0]) { hook(0, 1, 0); }
+        rotate(90) translate([0, width*0.5 + 0.5*thickness, 0]) { hook(0, 1, 0); }
+    }
+    rotate(180) translate([0, width*0.5 + 0.5*thickness, 0]) { hook(0, 1, margin); }
+    rotate(270) translate([0, width*0.5 + 0.5*thickness, 0]) { hook(0, 1, margin); }
+}
+
 
 // translate([tile_width+0.1, 0, 0]) { one_by_one(); }
