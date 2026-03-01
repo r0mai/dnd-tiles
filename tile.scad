@@ -31,9 +31,11 @@ module one_by_one() {
                 difference() { notch(+tile_width*0.5, 0, notch_size-notch_margin, tile_height); inner_cube(); }
                 difference() { notch(0, +tile_width*0.5, notch_size-notch_margin, tile_height); inner_cube(); }
             }
+            // cutout for inverse notches
             notch(-tile_width*0.5, 0, notch_size*1.8, tile_height*2);
             notch(0, -tile_width*0.5, notch_size*1.8, tile_height*2);
         }
+        // inverse notches
         difference() {
             notch(0, -tile_width*0.5, 2*notch_size, tile_height);
             external_world(0, -1);
