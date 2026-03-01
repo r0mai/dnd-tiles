@@ -18,7 +18,7 @@ module hook(x, y, m) {
 
     translate([x*0.5*width, 0, (hook_height-height)*0.5]) {
         cube([hook_width+m, 3*thickness, hook_height+m], center=true); // hook bottom cube
-        translate([0, thickness, thickness]) {
+        translate([0, thickness+margin*0.5, thickness]) {
             cube([hook_width, thickness - margin, 2*hook_height], center=true); // hook side cube
         }
     }
