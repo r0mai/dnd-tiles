@@ -1,5 +1,6 @@
 width = 30;
 thickness = 2;
+hook_thickness = 2;
 height = 8;
 hook_height = 2;
 hook_width = 10;
@@ -44,3 +45,8 @@ difference() {
 
 
 // translate([tile_width+0.1, 0, 0]) { one_by_one(); }
+
+
+// Make in 1mm
+// Add 4 bumps at the corners to align tiles with
+// Make 3x3 version
